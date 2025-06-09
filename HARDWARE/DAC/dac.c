@@ -119,7 +119,7 @@ void DAC1_Generate_Wave(u16 freq, u16 amp, u8 type)
     
     // 配置定时器频率
     // 计算实际需要的定时器中断频率 = 波形表大小 * 期望波形频率
-    uint32_t timer_freq = WAVE_TABLE_SIZE * freq;
+    uint32_t timer_freq = WAVE_TABLE_SIZE * freq *2;
     
     // 计算预分频值和周期值
     uint32_t prescaler = (SystemCoreClock / timer_freq) / 0x10000;
