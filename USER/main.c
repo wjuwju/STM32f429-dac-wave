@@ -18,6 +18,8 @@
  ���ߣ�����ԭ�� @ALIENTEK
 ************************************************/
 
+TIM_HandleTypeDef htim6;
+
 int main(void)
 {
     u16 adcx;
@@ -36,6 +38,18 @@ int main(void)
     LCD_Init();                     //��ʼ��LCD
     MY_ADC_Init();                  //��ʼ��ADC1
     DAC1_Init();                    //��ʼ��DAC1
+    WaveTable_Init();               //��ʼ������
+    
+    // TIM6 initialization for DAC trigger
+    htim6.Instance = TIM6;
+    htim6.Init.Prescaler = 0;
+    htim6.Init.CounterMode = TIM_COUNTERMODE_UP;
+    htim6.Init.Period = 179; // Default for 1kHz with 180MHz clock
+    if (HAL_TIM_Base_Init(&htim6) != HAL_OK)
+    {
+        while(1); // Error handler
+    }
+    HAL_TIM_Base_Start(&htim6);
     
 	POINT_COLOR=RED; 
 	LCD_ShowString(30,50,200,16,16,"Apollo STM32F4/F7");	

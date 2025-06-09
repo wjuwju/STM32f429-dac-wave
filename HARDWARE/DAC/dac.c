@@ -54,28 +54,56 @@ void DAC1_Set_Vol(u16 vol)
     HAL_DAC_SetValue(&DAC1_Handler,DAC_CHANNEL_1,DAC_ALIGN_12B_R,temp);//12λ�Ҷ������ݸ�ʽ����DACֵ
 }
 
-//���������ź�
-//freq:Ƶ��(Hz)
-//amp:���(0~3300)
-//type:�������� 0:���Ҳ� 1:����� 2:����
+// 波形表大小
+#define WAVE_TABLE_SIZE 256
+#include "math.h"
+
+// 正弦波表
+static u16 sine_table[WAVE_TABLE_SIZE];
+// 三角波表
+static u16 triangle_table[WAVE_TABLE_SIZE];
+
+// 定时器句柄
+extern TIM_HandleTypeDef htim6;
+
+// 初始化波形表
+void WaveTable_Init(void)
+{
+    for(int i=0; i<WAVE_TABLE_SIZE; i++)
+    {
+        // 正弦波表
+        sine_table[i] = (u16)(2048 * (1 + sin(2*3.14159*i/WAVE_TABLE_SIZE)));
+        
+        // 三角波表
+        if(i < WAVE_TABLE_SIZE/2)
+            triangle_table[i] = (u16)(4096 * i / (WAVE_TABLE_SIZE/2));
+        else
+            triangle_table[i] = (u16)(4096 * (WAVE_TABLE_SIZE - i) / (WAVE_TABLE_SIZE/2));
+    }
+}
+
+// 使用定时器触发DAC转换
+// freq: 频率(Hz)
+// amp: 幅度(0~3300)
+// type: 波形类型 0:正弦波 1:三角波 2:方波
 void DAC1_Generate_Wave(u16 freq, u16 amp, u8 type)
 {
-    static u16 phase = 0;
+    static u16 index = 0;
     u16 value;
     
-    //��������
+    // 根据类型选择波形
     switch(type)
     {
-        case 0: //���Ҳ�
-            value = (u16)((amp/2) * (1 + sin(2*3.14159*phase/360)));
+        case 0: // 正弦波
+            value = (u16)((amp * sine_table[index]) / 4096);
             break;
             
-        case 1: //�����
-            value = (u16)((amp * phase) / 360);
+        case 1: // 三角波
+            value = (u16)((amp * triangle_table[index]) / 4096);
             break;
             
-        case 2: //����
-            value = (phase < 180) ? amp : 0;
+        case 2: // 方波
+            value = (index < WAVE_TABLE_SIZE/2) ? amp : 0;
             break;
             
         default:
@@ -85,7 +113,16 @@ void DAC1_Generate_Wave(u16 freq, u16 amp, u8 type)
     
     DAC1_Set_Vol(value);
     
-    //���¸���λ
-    phase += (freq * 360) / 1000; //����1kHzΪ��������
-    if(phase >= 360) phase -= 360;
+    // 更新索引
+    index++;
+    if(index >= WAVE_TABLE_SIZE) index = 0;
+    
+    // 配置定时器频率
+    uint32_t timer_freq = WAVE_TABLE_SIZE * freq;
+    uint32_t prescaler = 180000000 / timer_freq / 0xFFFF;
+    uint32_t period = (180000000 / (prescaler+1)) / timer_freq - 1;
+    
+    __HAL_TIM_SET_PRESCALER(&htim6, prescaler);
+    __HAL_TIM_SET_AUTORELOAD(&htim6, period);
+    HAL_TIM_Base_Start_IT(&htim6);
 }
