@@ -59,7 +59,7 @@ void DAC1_Set_Vol(u16 vol)
 #include "math.h"
 
 // 正弦波表
-static u16 sine_table[WAVE_TABLE_SIZE];
+u16 sine_table[WAVE_TABLE_SIZE];
 // 三角波表
 static u16 triangle_table[WAVE_TABLE_SIZE];
 
@@ -118,9 +118,16 @@ void DAC1_Generate_Wave(u16 freq, u16 amp, u8 type)
     if(index >= WAVE_TABLE_SIZE) index = 0;
     
     // 配置定时器频率
+    // 计算实际需要的定时器中断频率 = 波形表大小 * 期望波形频率
     uint32_t timer_freq = WAVE_TABLE_SIZE * freq;
-    uint32_t prescaler = (180000000 / timer_freq) / 0x10000;
-    uint32_t period = (180000000 / (prescaler+1)) / timer_freq - 1;
+    
+    // 计算预分频值和周期值
+    uint32_t prescaler = (SystemCoreClock / timer_freq) / 0x10000;
+    uint32_t period = (SystemCoreClock / (prescaler + 1)) / timer_freq - 1;
+    
+    // 确保period值在有效范围内
+    if(period > 0xFFFF) period = 0xFFFF;
+    if(period < 1) period = 1;
     
     // 停止定时器再重新配置
     HAL_TIM_Base_Stop_IT(&TIM3_Handler);

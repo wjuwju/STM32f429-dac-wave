@@ -1,5 +1,6 @@
 #include "timer.h"
 #include "led.h"
+#include "dac.h"
 //////////////////////////////////////////////////////////////////////////////////	 
 //������ֻ��ѧϰʹ�ã�δ���������ɣ��������������κ���;
 //ALIENTEK STM32F429������
@@ -62,5 +63,12 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
     if(htim==(&TIM3_Handler))
     {
         LED1=!LED1;        //LED1��ת
+        extern DAC_HandleTypeDef DAC1_Handler;
+        extern u16 sine_table[WAVE_TABLE_SIZE];
+        extern u16 triangle_table[WAVE_TABLE_SIZE];
+        static u16 wave_index = 0;
+        
+        wave_index = (wave_index + 1) % WAVE_TABLE_SIZE;
+        HAL_DAC_SetValue(&DAC1_Handler, DAC_CHANNEL_1, DAC_ALIGN_12B_R, sine_table[wave_index]);
     }
 }
