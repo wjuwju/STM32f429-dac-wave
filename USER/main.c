@@ -63,12 +63,15 @@ int main(void)
 	LCD_ShowString(30,190,200,16,16,"ADC VOL:0.000V"); 	
     
     // 信号发生器参数
-    u16 freq = 1000; // 默认1kHz
+    u16 freq = 100; // 默认1kHz
+    const u16 MIN_FREQ = 100;   // 最小频率100Hz
+    const u16 MAX_FREQ = 1000;  // 最大频率1kHz
+    const u16 FREQ_STEP = 100;  // 步进100Hz
     u16 amp = 2000;  // 默认2V峰峰值
     u8 wave_type = 0; // 默认正弦波
     
     LCD_ShowString(30,210,200,16,16,"Wave Type: Sine");
-    LCD_ShowString(30,230,200,16,16,"Freq: 1000Hz");
+    LCD_ShowString(30,230,200,16,16,"Freq: 100Hz");
     LCD_ShowString(30,250,200,16,16,"Amp: 2.0V");
     
     while(1)
@@ -77,7 +80,7 @@ int main(void)
         key=KEY_Scan(0);
         
         // 波形选择
-        if(key==KEY1_PRES)
+        if(key==KEY0_PRES)
         {
             wave_type = (wave_type + 1) % 3;
             switch(wave_type)
@@ -91,24 +94,33 @@ int main(void)
         // 频率调节
         if(key==WKUP_PRES)
         {
-            if(freq < 1000) freq += 100; // 步进100Hz
+            if(freq < MAX_FREQ) freq += FREQ_STEP; // 增加频率
             LCD_ShowxNum(70,230,freq,4,16,0);
             LCD_ShowString(114,230,200,16,16,"Hz   ");
+            
+            // 更新TIM6频率
+            htim6.Init.Period = (180000 / freq) - 1; // 180MHz/(freq*WAVE_TABLE_SIZE)
+            HAL_TIM_Base_Init(&htim6);
         }
-        else if(key==KEY0_PRES)
+        else if(key==KEY1_PRES)
         {
-            if(freq > 100) freq -= 100; // 步进100Hz
+            if(freq > MIN_FREQ) freq -= FREQ_STEP; // 减小频率
             LCD_ShowxNum(70,230,freq,4,16,0);
             LCD_ShowString(114,230,200,16,16,"Hz   ");
+            
+            // 更新TIM6频率
+            htim6.Init.Period = (180000 / freq) - 1; // 180MHz/(freq*WAVE_TABLE_SIZE)
+            HAL_TIM_Base_Init(&htim6);
         }
         
         // 幅度调节
         if(key==KEY2_PRES)
         {
             if(amp < 3300) amp += 200; // 步进0.2V
+            else amp = 0; // 达到最大值后回到最小值
             LCD_ShowxNum(70,250,amp/1000,1,16,0);
             LCD_ShowxNum(86,250,(amp%1000)/100,1,16,0);
-            LCD_ShowString(102,250,200,16,16,"V   ");
+            LCD_ShowString(102,250,200,16,16,"    ");
         }
         
         // 生成波形
