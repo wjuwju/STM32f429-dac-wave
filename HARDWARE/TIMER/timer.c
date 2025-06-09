@@ -70,17 +70,18 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
         
         wave_index = (wave_index + 1) % WAVE_TABLE_SIZE;
         extern u8 g_wave_type;
+        extern u16 g_amp; // 全局幅度变量
         u16 value;
         switch(g_wave_type)
         {
             case 0: // 正弦波
-                value = sine_table[wave_index];
+                value = (u16)((g_amp * sine_table[wave_index]) / 4096);
                 break;
             case 1: // 三角波
-                value = triangle_table[wave_index];
+                value = (u16)((g_amp * triangle_table[wave_index]) / 4096);
                 break;
             case 2: // 方波
-                value = (wave_index < WAVE_TABLE_SIZE/2) ? 4095 : 0;
+                value = (wave_index < WAVE_TABLE_SIZE/2) ? g_amp : 0;
                 break;
             default:
                 value = 0;

@@ -20,6 +20,7 @@
 ************************************************/
 // 在dac.c或main.c中添加
 u8 g_wave_type = 0; // 默认正弦波
+u16 g_amp = 2000; // 默认幅度2V
 
 
 int main(void)
@@ -98,6 +99,7 @@ int main(void)
             if(freq > MIN_FREQ) freq -= FREQ_STEP; // 减小频率
             LCD_ShowxNum(70,230,freq,4,16,0);
             LCD_ShowString(114,230,200,16,16,"   ");
+            //DAC1_Set_Vol(amp); // 立即更新DAC输出
             
 
         }
@@ -110,6 +112,7 @@ int main(void)
             LCD_ShowxNum(70,250,amp/1000,1,16,0);
             LCD_ShowxNum(86,250,(amp%1000)/100,1,16,0);
             LCD_ShowString(102,250,200,16,16,"    ");
+            g_amp = amp;
         }
         
         // 生成波形

@@ -111,7 +111,7 @@ void DAC1_Generate_Wave(u16 freq, u16 amp, u8 type)
             break;
     }
     
-    DAC1_Set_Vol(value);
+    //DAC1_Set_Vol(value);
     
     // 更新索引
     index++;

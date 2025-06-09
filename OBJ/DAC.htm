@@ -3,7 +3,7 @@
 <title>Static Call Graph - [..\OBJ\DAC.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image ..\OBJ\DAC.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060960: Last Updated: Mon Jun 09 20:12:18 2025
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060960: Last Updated: Mon Jun 09 20:21:17 2025
 <BR><P>
 <H3>Maximum Stack Usage =        360 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -796,12 +796,11 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32f429xx.o(RESET)
 </UL>
-<P><STRONG><a name="[9d]"></a>DAC1_Generate_Wave</STRONG> (Thumb, 140 bytes, Stack size 16 bytes, dac.o(i.DAC1_Generate_Wave))
-<BR><BR>[Stack]<UL><LI>Max Depth = 56<LI>Call Chain = DAC1_Generate_Wave &rArr; DAC1_Set_Vol &rArr; __aeabi_dmul
+<P><STRONG><a name="[9d]"></a>DAC1_Generate_Wave</STRONG> (Thumb, 86 bytes, Stack size 16 bytes, dac.o(i.DAC1_Generate_Wave))
+<BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = DAC1_Generate_Wave
 </UL>
 <BR>[Calls]<UL><LI><a href="#[9e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_Base_Stop_IT
 <LI><a href="#[9f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_Base_Start_IT
-<LI><a href="#[4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DAC1_Set_Vol
 </UL>
 <BR>[Called By]<UL><LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
@@ -824,8 +823,6 @@ Global Symbols
 <LI><a href="#[a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_ui2d
 <LI><a href="#[a7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_d2uiz
 <LI><a href="#[a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_ddiv
-</UL>
-<BR>[Called By]<UL><LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DAC1_Generate_Wave
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> usmart_config.o(.data)
 </UL>
@@ -1245,7 +1242,7 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[d6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_IRQHandler
 </UL>
 
-<P><STRONG><a name="[da]"></a>HAL_TIM_PeriodElapsedCallback</STRONG> (Thumb, 86 bytes, Stack size 0 bytes, timer.o(i.HAL_TIM_PeriodElapsedCallback))
+<P><STRONG><a name="[da]"></a>HAL_TIM_PeriodElapsedCallback</STRONG> (Thumb, 96 bytes, Stack size 0 bytes, timer.o(i.HAL_TIM_PeriodElapsedCallback))
 <BR><BR>[Stack]<UL><LI>Max Depth = 12<LI>Call Chain = HAL_TIM_PeriodElapsedCallback &rArr; HAL_DAC_SetValue
 </UL>
 <BR>[Calls]<UL><LI><a href="#[a8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_DAC_SetValue
@@ -1837,7 +1834,7 @@ Global Symbols
 <P><STRONG><a name="[6f]"></a>fputc</STRONG> (Thumb, 14 bytes, Stack size 0 bytes, usart.o(i.fputc))
 <BR>[Address Reference Count : 1]<UL><LI> _printf_char_file.o(.text)
 </UL>
-<P><STRONG><a name="[85]"></a>main</STRONG> (Thumb, 516 bytes, Stack size 16 bytes, main.o(i.main))
+<P><STRONG><a name="[85]"></a>main</STRONG> (Thumb, 522 bytes, Stack size 16 bytes, main.o(i.main))
 <BR><BR>[Stack]<UL><LI>Max Depth = 316 + Unknown Stack Size
 <LI>Call Chain = main &rArr; LCD_Init &rArr; LTDC_Init &rArr; LTDC_Layer_Parameter_Config &rArr; HAL_LTDC_ConfigLayer &rArr; LTDC_SetConfig
 </UL>

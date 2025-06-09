@@ -27,18 +27,23 @@ Project File Date:  06/09/2025
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 7 (build 960)', folder: 'd:\Keil_v5\ARM\ARMCC\Bin'
 Build target 'DAC'
+compiling timer.c...
+compiling dac.c...
+..\HARDWARE\DAC\dac.c(92): warning:  #550-D: variable "value"  was set but never used
+      u16 value;
+..\HARDWARE\DAC\dac.c: 1 warning, 0 errors
 compiling main.c...
-main.c(27): warning:  #177-D: variable "adcx"  was declared but never referenced
+main.c(28): warning:  #177-D: variable "adcx"  was declared but never referenced
       u16 adcx;
-main.c(28): warning:  #177-D: variable "temp"  was declared but never referenced
+main.c(29): warning:  #177-D: variable "temp"  was declared but never referenced
   	float temp;
-main.c(30): warning:  #177-D: variable "dacval"  was declared but never referenced
+main.c(31): warning:  #177-D: variable "dacval"  was declared but never referenced
   	u16 dacval=0;
 main.c: 3 warnings, 0 errors
 linking...
-Program Size: Code=35386 RO-data=19190 RW-data=360 ZI-data=2051480  
+Program Size: Code=35346 RO-data=19190 RW-data=360 ZI-data=2051480  
 FromELF: creating hex file...
-"..\OBJ\DAC.axf" - 0 Error(s), 3 Warning(s).
+"..\OBJ\DAC.axf" - 0 Error(s), 4 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -52,7 +57,7 @@ Package Vendor: Keil
   d:\Users\WJUWJU\AppData\Local\Arm\Packs\Keil\STM32F4xx_DFP\2.9.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include
 
 <h2>Collection of Component Files used:</h2>
-Build Time Elapsed:  00:00:02
+Build Time Elapsed:  00:00:03
 </pre>
 </body>
 </html>
