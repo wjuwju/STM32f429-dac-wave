@@ -82,3 +82,4 @@
 ..\obj\main.o: ..\USMART\usmart_str.h
 ..\obj\main.o: ..\HARDWARE\ADC\adc.h
 ..\obj\main.o: ..\HARDWARE\DAC\dac.h
+..\obj\main.o: ..\HARDWARE\TIMER\timer.h

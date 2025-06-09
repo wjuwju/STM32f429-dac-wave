@@ -61,7 +61,7 @@ void DAC1_Set_Vol(u16 vol)
 // 正弦波表
 u16 sine_table[WAVE_TABLE_SIZE];
 // 三角波表
-static u16 triangle_table[WAVE_TABLE_SIZE];
+u16 triangle_table[WAVE_TABLE_SIZE];
 
 // 定时器句柄
 extern TIM_HandleTypeDef TIM3_Handler;

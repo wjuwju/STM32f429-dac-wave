@@ -69,6 +69,23 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
         static u16 wave_index = 0;
         
         wave_index = (wave_index + 1) % WAVE_TABLE_SIZE;
-        HAL_DAC_SetValue(&DAC1_Handler, DAC_CHANNEL_1, DAC_ALIGN_12B_R, sine_table[wave_index]);
+        extern u8 g_wave_type;
+        u16 value;
+        switch(g_wave_type)
+        {
+            case 0: // 正弦波
+                value = sine_table[wave_index];
+                break;
+            case 1: // 三角波
+                value = triangle_table[wave_index];
+                break;
+            case 2: // 方波
+                value = (wave_index < WAVE_TABLE_SIZE/2) ? 4095 : 0;
+                break;
+            default:
+                value = 0;
+                break;
+        }
+        HAL_DAC_SetValue(&DAC1_Handler, DAC_CHANNEL_1, DAC_ALIGN_12B_R, value);
     }
 }

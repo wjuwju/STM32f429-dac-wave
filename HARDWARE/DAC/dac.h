@@ -20,6 +20,7 @@ extern DAC_HandleTypeDef DAC1_Handler;//DAC���
 
 extern u16 sine_table[WAVE_TABLE_SIZE];
 extern u16 triangle_table[WAVE_TABLE_SIZE];
+extern u8 g_wave_type;
 
 void DAC1_Init(void);
 void DAC1_Set_Vol(u16 vol);

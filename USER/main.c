@@ -8,6 +8,7 @@
 #include "usmart.h"
 #include "adc.h"
 #include "dac.h"
+#include "timer.h"
 /************************************************
  ALIENTEK ������STM32F429������ʵ��21
  DACʵ��-HAL�⺯����
@@ -17,7 +18,8 @@
  �������������ӿƼ����޹�˾  
  ���ߣ�����ԭ�� @ALIENTEK
 ************************************************/
-
+// 在dac.c或main.c中添加
+u8 g_wave_type = 0; // 默认正弦波
 
 
 int main(void)
@@ -59,6 +61,7 @@ int main(void)
     u16 amp = 2000;  // 默认2V峰峰值
     u8 wave_type = 0; // 默认正弦波
     
+    
     LCD_ShowString(30,210,200,16,16,"Wave Type: Sine");
     LCD_ShowString(30,230,200,16,16,"Freq: 100Hz");
     LCD_ShowString(30,250,200,16,16,"Amp: 2.0V");
@@ -72,6 +75,7 @@ int main(void)
         if(key==KEY0_PRES)
         {
             wave_type = (wave_type + 1) % 3;
+            g_wave_type = wave_type;
             switch(wave_type)
             {
                 case 0: LCD_ShowString(30,210,200,16,16,"Wave Type: Sine    "); break;
@@ -109,7 +113,7 @@ int main(void)
         }
         
         // 生成波形
-        DAC1_Generate_Wave(freq, amp, wave_type);
+        DAC1_Generate_Wave(freq, amp, g_wave_type);
         
         // 显示更新
         if(t==10)
