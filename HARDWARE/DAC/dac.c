@@ -64,7 +64,7 @@ static u16 sine_table[WAVE_TABLE_SIZE];
 static u16 triangle_table[WAVE_TABLE_SIZE];
 
 // 定时器句柄
-extern TIM_HandleTypeDef htim6;
+extern TIM_HandleTypeDef TIM3_Handler;
 
 // 初始化波形表
 void WaveTable_Init(void)
@@ -119,10 +119,12 @@ void DAC1_Generate_Wave(u16 freq, u16 amp, u8 type)
     
     // 配置定时器频率
     uint32_t timer_freq = WAVE_TABLE_SIZE * freq;
-    uint32_t prescaler = 180000000 / timer_freq / 0xFFFF;
+    uint32_t prescaler = (180000000 / timer_freq) / 0x10000;
     uint32_t period = (180000000 / (prescaler+1)) / timer_freq - 1;
     
-    __HAL_TIM_SET_PRESCALER(&htim6, prescaler);
-    __HAL_TIM_SET_AUTORELOAD(&htim6, period);
-    HAL_TIM_Base_Start_IT(&htim6);
+    // 停止定时器再重新配置
+    HAL_TIM_Base_Stop_IT(&TIM3_Handler);
+    __HAL_TIM_SET_PRESCALER(&TIM3_Handler, prescaler);
+    __HAL_TIM_SET_AUTORELOAD(&TIM3_Handler, period);
+    HAL_TIM_Base_Start_IT(&TIM3_Handler);
 }

@@ -18,7 +18,7 @@
  ���ߣ�����ԭ�� @ALIENTEK
 ************************************************/
 
-TIM_HandleTypeDef htim6;
+
 
 int main(void)
 {
@@ -40,16 +40,8 @@ int main(void)
     DAC1_Init();                    //��ʼ��DAC1
     WaveTable_Init();               //��ʼ������
     
-    // TIM6 initialization for DAC trigger
-    htim6.Instance = TIM6;
-    htim6.Init.Prescaler = 0;
-    htim6.Init.CounterMode = TIM_COUNTERMODE_UP;
-    htim6.Init.Period = 179; // Default for 1kHz with 180MHz clock
-    if (HAL_TIM_Base_Init(&htim6) != HAL_OK)
-    {
-        while(1); // Error handler
-    }
-    HAL_TIM_Base_Start(&htim6);
+    // TIM3 initialization for DAC trigger
+    TIM3_Init(179, 0);
     
 	POINT_COLOR=RED; 
 	LCD_ShowString(30,50,200,16,16,"Apollo STM32F4/F7");	
@@ -58,9 +50,6 @@ int main(void)
 	LCD_ShowString(30,110,200,16,16,"2016/1/24");	 
 	LCD_ShowString(30,130,200,16,16,"WK_UP:+  KEY1:-");	 
 	POINT_COLOR=BLUE;//��������Ϊ��ɫ      	 
-	LCD_ShowString(30,150,200,16,16,"DAC VAL:");	      
-	LCD_ShowString(30,170,200,16,16,"DAC VOL:0.000V");	      
-	LCD_ShowString(30,190,200,16,16,"ADC VOL:0.000V"); 	
     
     // 信号发生器参数
     u16 freq = 100; // 默认1kHz
@@ -96,21 +85,17 @@ int main(void)
         {
             if(freq < MAX_FREQ) freq += FREQ_STEP; // 增加频率
             LCD_ShowxNum(70,230,freq,4,16,0);
-            LCD_ShowString(114,230,200,16,16,"Hz   ");
+            LCD_ShowString(114,230,200,16,16,"   ");
             
-            // 更新TIM6频率
-            htim6.Init.Period = (180000 / freq) - 1; // 180MHz/(freq*WAVE_TABLE_SIZE)
-            HAL_TIM_Base_Init(&htim6);
+
         }
         else if(key==KEY1_PRES)
         {
             if(freq > MIN_FREQ) freq -= FREQ_STEP; // 减小频率
             LCD_ShowxNum(70,230,freq,4,16,0);
-            LCD_ShowString(114,230,200,16,16,"Hz   ");
+            LCD_ShowString(114,230,200,16,16,"   ");
             
-            // 更新TIM6频率
-            htim6.Init.Period = (180000 / freq) - 1; // 180MHz/(freq*WAVE_TABLE_SIZE)
-            HAL_TIM_Base_Init(&htim6);
+
         }
         
         // 幅度调节
